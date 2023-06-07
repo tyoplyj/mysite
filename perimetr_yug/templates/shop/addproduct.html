@@ -1,0 +1,26 @@
+{% extends 'shop/base.html' %}
+
+{% block content%}
+  <div class="container album py-5 bg-body-tertiary">
+    <div class="container">
+      <div class="justify-content-center row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+
+
+<!--<h1>{{title}}</h1>-->
+<form action="{% url 'addproduct' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="form-error">{{ form.non_field_errors }}</div>
+
+{% for f in form %}
+<p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label> {{ f }}</p>
+<div class="form-error">{{ f.errors}}</div>
+{% endfor %}
+
+    <button type="submit">Добавить</button>
+</form>
+
+      </div>
+    </div>
+  </div>
+{% endblock %}

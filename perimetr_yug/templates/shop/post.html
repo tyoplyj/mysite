@@ -1,0 +1,120 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+<main class="container mt-5 marketing">
+    <div class="row featurette">
+
+            <h2 class=" fw-normal mb-5 lh-1 text-orange">{{ post.title }}</h2>
+        <div class="col-md-4 order-md-1">
+            {% if post.photo %}
+            <img class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500"
+                src="{{ post.photo.url }}" role="img" aria-label="Placeholder: 500x500" preserveAspectRatio="xMidYMid slice"
+                 focusable="false">
+            {% endif %}
+        </div>
+        <div class="col-md-5 order-md-2">
+            <p class="lead">{{ post.content|linebreaks }}</p>
+            <h2 class="text-orange">Цена {{ post.price }}р.</h2>
+
+            <div class="btn-group mt-4">
+    {% if previous_product %}
+                  <a type="button" class="btn btn-sm btn-outline-secondary"
+                          href="{{ previous_product.get_absolute_url }}">Предыдущий товар
+                  </a>
+    {% endif %}
+    {% if next_product %}
+                  <a type="button" class="btn btn-sm btn-outline-secondary"
+                          href="{{ next_product.get_absolute_url }}">Следующий товар
+                  </a>
+    {% endif %}
+</div>
+        </div>
+
+        <!-- Блок категории -->
+<div class="col-md-2 order-md-3" id="icon-grid1">
+    <h5 class="text-center text-orange pb-2 border-bottom">Категории</h5>
+
+    <div class="text-center ">
+	{% for category_photo in category_photos %}
+      <div class="">
+        {% if category_photo.photo %}
+        <a class="cat21" href="{{ category_photo.get_absolute_url }}">
+        <img class="" src="{{ category_photo.photo.url }}" alt="{{ category_photo.name }}">
+		{% endif %}
+              <h6 class="">{{ category_photo.name }}</h6>
+          </a>
+      </div>
+	{% endfor %}
+    </div>
+
+</div>
+
+</div>
+    <!-- характеристики, обзор -->
+        <div class="container">
+        <div class="row">
+
+            <div class="col-md-12 order-md-1">
+            <a class="btn btn-white" href="#box1"
+               onclick="openbox1('box1'); return false">
+                <p class="text-orange">Характеристики</p>
+            </a>
+                 <a class="btn btn-white" href="#box"
+               onclick="openbox('box'); return false">
+                <p class="text-orange">Обзор</p>
+            </a>
+                <div class="row" id="box1" style="display: none">
+            <p class="">{{ post.param|linebreaks }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-12 order-md-2">
+
+                <div class="row" id="box" style="display: none">
+            <p class="">{{ post.contents|linebreaks }}</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- другие товары -->
+<div class="row pt-4">
+<h4 class="text-center text-orange pb-2 border-bottom">Другие товары в этой категории</h4>
+{% if next_product %}
+      <div class="col-lg-4">
+        <img class="bd-placeholder-img rounded-circle"
+             width="140" heigхht="140"src="{{ next_product.photo.url }}" alt="{{ next_product.title }}">
+        <h2 class="h_80 fw-normal">{{ next_product.title }}</h2>
+        <div class="h_100"><p>{{ next_product.content }}</p></div>
+        <p><a class="btn btn-secondary" href="{{ next_product.get_absolute_url }}">{{ next_product.price }}</a></p>
+      </div><!-- /.col-lg-4 -->
+{% endif %}
+
+
+{% if previous_product %}
+      <div class="col-lg-4">
+        <img class="bd-placeholder-img rounded-circle"
+             width="140" height="140"src="{{ previous_product.photo.url }}" alt="{{ next_product.title }}">
+        <h2 class="h_80 fw-normal">{{ previous_product.title }}</h2>
+        <div class="h_100"><p>{{ previous_product.content }}</p></div>
+        <p><a class="btn btn-secondary" href="{{ previous_product.get_absolute_url }}">{{ previous_product.price }}</a></p>
+      </div><!-- /.col-lg-4 -->
+{% endif %}
+
+{% if previous_product %}
+      <div class="col-lg-4">
+        <img class="bd-placeholder-img rounded-circle"
+             width="140" height="140"src="{{ previous_product.photo.url }}" alt="{{ next_product.title }}">
+        <h2 class="h_80 fw-normal">{{ previous_product.title }}</h2>
+        <div class="h_100"><p>{{ previous_product.content }}</p></div>
+        <p><a class="btn btn-secondary" href="{{ previous_product.get_absolute_url }}">{{ previous_product.price }}</a></p>
+      </div><!-- /.col-lg-4 -->
+{% endif %}
+
+</div>
+
+</main>
+
+
+{% endblock %}

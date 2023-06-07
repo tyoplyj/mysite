@@ -1,0 +1,38 @@
+{% extends 'shop/base.html' %}
+
+{% block content %}
+
+<div class="container">
+<h1>{{ title }}</h1>
+
+<form method="post">
+    {% csrf_token %}
+
+    {% for f in form %}
+    <p><label class="col-form-label" for="{{ f.id_for_label }}">{{f.label}}:</label>{{f}}</p>
+    <div class="form-error">{{f.errors}}</div>
+    {% endfor %}
+
+    <button class="btn btn-light rounded-pill px-3" type="submit">Регистрация</button>
+</form>
+
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

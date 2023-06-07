@@ -1,0 +1,197 @@
+{% load static %}
+{% load shop_tags %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{Title}}</title>
+    <link type="text/css" href="{% static 'shop/css/bootstrap.css' %}" rel="stylesheet"/>
+    <script src="{% static 'shop/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'shop/js/mine.js' %}"></script>
+</head>
+<body>
+
+
+<!-- Верхнее светлое меню -->
+{% block mainmenu %}
+
+<nav class="container navbar navbar-expand-lg rounded" aria-label="Thirteenth navbar example">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample11" aria-controls="navbarsExample11"
+                aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse d-lg-flex" id="navbarsExample11">
+          <img class="logo" href="#" src="{% static 'shop/images/Logo_ByteBay2.png' %}" alt="Логотип">
+
+          <ul class="pl-4 navbar-nav col-lg-6 justify-content-lg-center1">
+{% for m in menu %}
+            <li class="nav-item">
+              <a class="nav-link" href="{% url m.url_name %}">{{m.title}}</a>
+            </li>
+{% endfor %}
+          </ul>
+
+            <!-- Боковые кнопки авторизации -->
+            {% if request.user.is_authenticated %}
+            <div class="d-lg-flex col-lg-3 justify-content-lg-end" style="padding-right: 40px;">
+            <p class="px-4">
+                {{ user.username }}
+            </p>
+            <a href="{% url 'logout' %}" class="text-orange btn btn-light rounded-pill px-3" type="button">
+                Выйти
+            </a>
+                {% if user.is_staff %}
+            <a href="{% url 'admin:index' %}" class="text-orange btn btn-light rounded-pill px-3" type="button">
+                Админ
+            </a>
+                {% endif %}
+          </div>
+            {% else %}
+          <div class="d-lg-flex col-lg-3 justify-content-lg-end" style="padding-right: 40px;">
+            <a href="{% url 'register' %}" class="text-orange btn btn-light rounded-pill px-3" type="button">
+                Регистрация
+            </a>
+            <a href="{% url 'login' %}" class="text-orange btn btn-light rounded-pill px-3" type="button">
+                Войти
+            </a>
+          </div>
+            {% endif %}
+            <!-- ------------------------ -->
+
+        </div>
+      </div>
+    </nav>
+{% endblock mainmenu %}
+
+<!-- Верхнее тёмное меню -->
+{% block TitleBlock %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-gradient1" aria-label="Tenth navbar example">
+
+    <div class="container container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarsExample08" aria-controls="navbarsExample08"
+                aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+<span class="text-orange text-buter">{{title}}</span>
+        </button>
+        <div class=" collapse navbar-collapse justify-content-md-center" id="navbarsExample08">
+        <ul class="navbar-nav navbar-toggler">
+                {% if cat_selected == 0 %}
+            <li class="nav-item"><a class="dropdown-item selected">Все категории</a></li>
+                {% else %}
+            <li class="nav-item"><a class="dropdown-item selected" href="{% url 'home' %}">Все категории</a></li>
+                {% endif %}
+
+                {% for c in cats %}
+                    {% if c.pk == cat_selected %}
+            <li class="nav-item"><a class="dropdown-item">{{c.name}}</a></li>
+                    {% else %}
+            <li class="nav-item"><a class="dropdown-item" href="{{ c.get_absolute_url }}">{{c.name}}</a></li>
+                    {% endif %}
+                {% endfor %}
+        </ul>
+<!-- Категории-->
+
+<ul class="navbar-nav hidden991">
+    <li class="nav-item dropdown">
+            <a class="text-orange nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Категория</a>
+        <ul class="dropdown-menu">
+                {% if cat_selected == 0 %}
+            <li class="nav-item "><a class="dropdown-item">Все категории</a></li>
+                {% else %}
+            <li class="nav-item "><a class="dropdown-item" href="{% url 'home' %}">Все категории</a></li>
+                {% endif %}
+
+                {% for c in cats %}
+            {% if c.perimetrshop__count > 0 %}
+                    {% if c.pk == cat_selected %}
+            <li class="nav-item"><a class="dropdown-item">{{c.name}}</a></li>
+                    {% else %}
+            <li class="nav-item"><a class="dropdown-item" href="{{ c.get_absolute_url }}">{{c.name}}</a></li>
+                    {% endif %}
+            {% endif %}
+                {% endfor %}
+        </ul>
+    </li>
+</ul>
+            <h5 class="title_h1 text-orange hidden991">{{title}}</h5>
+        </div>
+    </div>
+
+</nav>
+{% endblock TitleBlock %}
+
+{% block content%}
+{% endblock %}
+
+<!-- Пагинация -->
+{% if page_obj.has_other_pages %}
+<div class="d-flex gap-2 justify-content-center py-5">
+    {% if page_obj.has_previous %}
+    <a class="btn btn-light rounded-pill px-3" type="button" href="?page={{ page_obj.previous_page_number }}">
+        <strong><</strong>
+    </a>
+    {% endif %}
+        {% for p in paginator.page_range %}
+        {% if page_obj.number == p %}
+            <a class="btn rounded-pill px-3" >
+                {{ p }}
+            </a>
+        {% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %}
+            <a class="btn btn-light rounded-pill px-3" type="button" href="?page={{ p }}">
+                {{ p }}
+            </a>
+        {% endif %}
+        {% endfor %}
+    {% if page_obj.has_next %}
+    <a class="btn btn-light rounded-pill px-3" type="button" href="?page={{ page_obj.next_page_number }}">
+        <strong>></strong>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Футер -->
+{% block futer %}
+<div class="container">
+  <footer class="pt-5">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <h5 class="nav justify-content-center">Меню</h5>
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+{% for m in menu %}
+    <li>
+       <a href="{% url m.url_name %}" class="nav-link px-2"> {{m.title}} </a>
+    </li>
+    {% endfor %}
+        </ul>
+      </div>
+
+
+      <div class="col-md-6 mb-3">
+        <form>
+          <h5>Подпишитесь чтоб быть в курсе самых горячих предложений!</h5>
+          <p>Ежемесячный дайджест того, что у нас нового и интересного.</p>
+          <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+            <label for="newsletter1" class="visually-hidden">Email address</label>
+            <input id="newsletter1" type="text" class="form-control" placeholder="Email address">
+            <button class="btn btn-outline-orange" type="button">Subscribe</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="border-top">
+      <p>&copy; 2023 Компания "Периметр Юг"</p>
+    </div>
+  </footer>
+</div>
+{% endblock %}
+
+</body>
+</html>
